@@ -19,8 +19,6 @@ const trainStd = [
 async function loadModel() {
     try {
         console.log("Attempting to load model from ./model/tfjs_model/model.json...");
-
-        // Ensure this path matches your GitHub repo exactly
         model = await tf.loadLayersModel('./model/tfjs_model/model.json');
 
         const btn = document.getElementById('predict-btn');
@@ -33,9 +31,8 @@ async function loadModel() {
         const btn = document.getElementById('predict-btn');
         btn.innerText = "Model Load Error";
 
-        // Show the exact error on the screen for debugging
         document.getElementById('result-container').style.display = 'block';
-        document.getElementById('error-log').innerText = "Error: " + error.message + "\n(Press F12 to check the console for details)";
+        document.getElementById('error-log').innerText = "Error: " + error.message;
     }
 }
 
@@ -43,38 +40,71 @@ async function loadModel() {
 // 2. PROCESS DATA & PREDICT
 // ==========================================
 async function runPrediction() {
+    // 1. Gather all raw inputs
     const rawAge = parseFloat(document.getElementById('age').value);
+    const rawDailySocial = parseFloat(document.getElementById('dailySocial').value);
     const rawSleep = parseFloat(document.getElementById('sleepHours').value);
+    const rawScreenTime = parseFloat(document.getElementById('screenTime').value);
+    const rawAcademic = parseFloat(document.getElementById('academic').value);
+    const rawPhysical = parseFloat(document.getElementById('physical').value);
+    const rawSocialInteraction = parseFloat(document.getElementById('socialInteraction').value); // 0, 1, or 2
     const rawStress = parseFloat(document.getElementById('stressLevel').value);
-    const gender = document.getElementById('gender').value;
+    const rawAnxiety = parseFloat(document.getElementById('anxietyLevel').value);
+    const rawAddiction = parseFloat(document.getElementById('addictionLevel').value);
 
+    const gender = document.getElementById('gender').value;
+    const platform = document.getElementById('platform').value;
+
+    // 2. Map exactly to Python DataFrame columns
     let userFeatures = [
         rawAge,
+        rawDailySocial,
         rawSleep,
+        rawScreenTime,
+        rawAcademic,
+        rawPhysical,
+        rawSocialInteraction,
         rawStress,
-        // Remember to add the rest of your features here in the exact order!
+        rawAnxiety,
+        rawAddiction,
         gender === 'female' ? 1.0 : 0.0,
-        gender === 'male' ? 1.0 : 0.0
+        gender === 'male' ? 1.0 : 0.0,
+        platform === 'Both' ? 1.0 : 0.0,
+        platform === 'Instagram' ? 1.0 : 0.0,
+        platform === 'TikTok' ? 1.0 : 0.0
     ];
 
+    // 3. Apply Z-Score Scaling
     let scaledFeatures = [];
     for (let i = 0; i < userFeatures.length; i++) {
         let zScore = (userFeatures[i] - trainMean[i]) / trainStd[i];
         scaledFeatures.push(zScore);
     }
 
-    const inputTensor = tf.tensor2d([scaledFeatures]);
-    const prediction = model.predict(inputTensor);
-    const probabilityValue = await prediction.data();
+    try {
+        // 4. Create Tensor and Predict
+        const inputTensor = tf.tensor2d([scaledFeatures]);
+        const prediction = model.predict(inputTensor);
+        const probabilityValue = await prediction.data();
 
-    const percentage = (probabilityValue[0] * 100).toFixed(1);
+        const percentage = (probabilityValue[0] * 100).toFixed(1);
 
-    document.getElementById('result-container').style.display = 'block';
-    document.getElementById('result-text').innerText = `${percentage}%`;
-    document.getElementById('error-log').innerText = ""; // Clear any old errors
+        document.getElementById('result-container').style.display = 'block';
+        document.getElementById('result-text').innerText = `${percentage}%`;
 
-    inputTensor.dispose();
-    prediction.dispose();
+        // Dynamic coloring based on risk
+        if (percentage < 30) document.getElementById('result-text').style.color = "#32D74B"; // Green
+        else if (percentage < 70) document.getElementById('result-text').style.color = "#FFD60A"; // Yellow
+        else document.getElementById('result-text').style.color = "#FF453A"; // Red
+
+        document.getElementById('error-log').innerText = "";
+
+        inputTensor.dispose();
+        prediction.dispose();
+    } catch (error) {
+        console.error("Prediction error:", error);
+        document.getElementById('error-log').innerText = "Prediction Error: Check Console";
+    }
 }
 
 // Start loading the model
