@@ -1,6 +1,6 @@
 # 🧠 Mental Health & Social Media: Depression Risk Predictor
 
-[![Test the Live Website!](https://img.shields.io/badge/Test_the_Live_Website!-FF4B4B?style=for-the-badge&logo=googlechrome&logoColor=white)](https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/)
+[![Test the Live Website!](https://img.shields.io/badge/Test_the_Live_Website!-FF4B4B?style=for-the-badge&logo=googlechrome&logoColor=white)](https://Shobhit3244.github.io/ML-Project-Depression-Prediction/)
 
 **A College Machine Learning Project** investigating the correlation between digital habits, lifestyle factors, and depression. This project features an end-to-end pipeline: from manual data preprocessing from scratch to training a Deep Neural Network, culminating in a serverless, browser-based deployment using TensorFlow.js.
 
@@ -76,4 +76,4 @@ If you wish to explore the code or run the Python notebook locally:
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME.git)
+   git clone [https://github.com/Shobhit3244/ML-Project-Depression-Prediction.git](https://github.com/Shobhit3244/ML-Project-Depression-Prediction.git)
