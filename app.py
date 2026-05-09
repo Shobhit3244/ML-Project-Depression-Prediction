@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app) 
 
 # 1. Load the model (you can use your .keras or .h5 file here)
-model = tf.keras.models.load_model('depression_model.h5')
+model = tf.keras.models.load_model('model/depression_model.h5')
 
 # 2. Add your scaling numbers
 train_mean = np.array([15.936, 4.491, 6.424, 1.738, 2.992, 1.010, 0.943, 5.439, 5.608, 5.552, 0.484, 0.515, 0.331, 0.337, 0.331])
