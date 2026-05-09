@@ -10,25 +10,16 @@
             "config": {
                 "name": "sequential_1",
                 "trainable": true,
-                "dtype": {
-                    "module": "keras",
-                    "class_name": "DTypePolicy",
-                    "config": {
-                        "name": "float32"
-                    },
-                    "registered_name": null
-                },
+                "dtype": "float32",
                 "layers": [
                     {
-                        "class_name": "batchInputShape",
+                        "class_name": "InputLayer",
                         "config": {
-                            "batch_shape": [
+                            "batchInputShape": [
                                 null,
                                 15
                             ],
                             "dtype": "float32",
-                            "sparse": false,
-                            "ragged": false,
                             "name": "input_layer_2"
                         }
                     },
@@ -37,35 +28,20 @@
                         "config": {
                             "name": "dense_6",
                             "trainable": true,
-                            "dtype": {
-                                "module": "keras",
-                                "class_name": "DTypePolicy",
-                                "config": {
-                                    "name": "float32"
-                                },
-                                "registered_name": null
-                            },
+                            "dtype": "float32",
                             "units": 32,
                             "activation": "relu",
                             "use_bias": true,
                             "kernel_initializer": {
                                 "module": "keras.initializers",
                                 "class_name": "GlorotUniform",
-                                "config": {
-                                    "seed": null
-                                },
-                                "registered_name": null
+                                "config": {}
                             },
                             "bias_initializer": {
                                 "module": "keras.initializers",
                                 "class_name": "Zeros",
-                                "config": {},
-                                "registered_name": null
-                            },
-                            "kernel_regularizer": null,
-                            "bias_regularizer": null,
-                            "kernel_constraint": null,
-                            "bias_constraint": null
+                                "config": {}
+                            }
                         }
                     },
                     {
@@ -73,17 +49,8 @@
                         "config": {
                             "name": "dropout_2",
                             "trainable": true,
-                            "dtype": {
-                                "module": "keras",
-                                "class_name": "DTypePolicy",
-                                "config": {
-                                    "name": "float32"
-                                },
-                                "registered_name": null
-                            },
-                            "rate": 0.2,
-                            "seed": null,
-                            "noise_shape": null
+                            "dtype": "float32",
+                            "rate": 0.2
                         }
                     },
                     {
@@ -91,35 +58,20 @@
                         "config": {
                             "name": "dense_7",
                             "trainable": true,
-                            "dtype": {
-                                "module": "keras",
-                                "class_name": "DTypePolicy",
-                                "config": {
-                                    "name": "float32"
-                                },
-                                "registered_name": null
-                            },
+                            "dtype": "float32",
                             "units": 16,
                             "activation": "relu",
                             "use_bias": true,
                             "kernel_initializer": {
                                 "module": "keras.initializers",
                                 "class_name": "GlorotUniform",
-                                "config": {
-                                    "seed": null
-                                },
-                                "registered_name": null
+                                "config": {}
                             },
                             "bias_initializer": {
                                 "module": "keras.initializers",
                                 "class_name": "Zeros",
-                                "config": {},
-                                "registered_name": null
-                            },
-                            "kernel_regularizer": null,
-                            "bias_regularizer": null,
-                            "kernel_constraint": null,
-                            "bias_constraint": null
+                                "config": {}
+                            }
                         }
                     },
                     {
@@ -127,73 +79,23 @@
                         "config": {
                             "name": "dense_8",
                             "trainable": true,
-                            "dtype": {
-                                "module": "keras",
-                                "class_name": "DTypePolicy",
-                                "config": {
-                                    "name": "float32"
-                                },
-                                "registered_name": null
-                            },
+                            "dtype": "float32",
                             "units": 1,
                             "activation": "sigmoid",
                             "use_bias": true,
                             "kernel_initializer": {
                                 "module": "keras.initializers",
                                 "class_name": "GlorotUniform",
-                                "config": {
-                                    "seed": null
-                                },
-                                "registered_name": null
+                                "config": {}
                             },
                             "bias_initializer": {
                                 "module": "keras.initializers",
                                 "class_name": "Zeros",
-                                "config": {},
-                                "registered_name": null
-                            },
-                            "kernel_regularizer": null,
-                            "bias_regularizer": null,
-                            "kernel_constraint": null,
-                            "bias_constraint": null
+                                "config": {}
+                            }
                         }
                     }
-                ],
-                "build_input_shape": [
-                    null,
-                    15
                 ]
-            }
-        },
-        "training_config": {
-            "loss": "binary_crossentropy",
-            "loss_weights": null,
-            "metrics": [
-                "accuracy"
-            ],
-            "weighted_metrics": null,
-            "run_eagerly": false,
-            "steps_per_execution": 1,
-            "jit_compile": false,
-            "optimizer_config": {
-                "class_name": "Adam",
-                "config": {
-                    "name": "adam",
-                    "learning_rate": 0.0010000000474974513,
-                    "weight_decay": null,
-                    "clipnorm": null,
-                    "global_clipnorm": null,
-                    "clipvalue": null,
-                    "use_ema": false,
-                    "ema_momentum": 0.99,
-                    "ema_overwrite_frequency": null,
-                    "loss_scale_factor": null,
-                    "gradient_accumulation_steps": null,
-                    "beta_1": 0.9,
-                    "beta_2": 0.999,
-                    "epsilon": 1e-07,
-                    "amsgrad": false
-                }
             }
         }
     },
