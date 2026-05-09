@@ -5,8 +5,9 @@ import numpy as np
 import os
 
 app = Flask(__name__)
-# This allows your GitHub Pages website to securely talk to this Render server
-CORS(app) 
+
+# STRONGER CORS CONFIGURATION: Allow all origins, methods, and headers
+CORS(app, resources={r"/*": {"origins": "*"}}) 
 
 # 1. Load the model (Must be in the exact same folder as this script on Render)
 # We use try-except to catch any file path errors immediately
