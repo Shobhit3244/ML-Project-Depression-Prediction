@@ -1,79 +1,50 @@
-# 🧠 Mental Health & Social Media: Depression Risk Predictor
+# MindMetrics: AI-Powered Teenage Mental Health Predictor
 
-[![Test the Live Website!](https://img.shields.io/badge/Test_the_Live_Website!-FF4B4B?style=for-the-badge&logo=googlechrome&logoColor=white)](https://Shobhit3244.github.io/ML-Project-Depression-Prediction/)
+![Live Demo](https://img.shields.io/badge/Live_Demo-Active-success)
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15-orange)
+![Flask](https://img.shields.io/badge/Flask-Backend-green)
 
-**A College Machine Learning Project** investigating the correlation between digital habits, lifestyle factors, and depression. This project features an end-to-end pipeline: from manual data preprocessing from scratch to training a Deep Neural Network, culminating in a serverless, browser-based deployment using TensorFlow.js.
+**Live Demo:** [https://shobhit3244.github.io/ML-Project-Depression-Prediction/](https://shobhit3244.github.io/ML-Project-Depression-Prediction/)
 
----
+## 📌 Project Overview
+MindMetrics is a full-stack machine learning web application designed to assess the estimated risk of depression in teenagers based on lifestyle and psychological factors. The project utilizes a deep learning Neural Network trained on a comprehensive dataset of teenage mental health indicators.
 
-## 📖 Project Overview
+## 🚀 Architecture
+This application utilizes a decoupled frontend-backend architecture to bypass typical cloud memory constraints:
+* **Frontend:** A responsive, interactive Single Page Application (SPA) built with HTML, CSS (Glassmorphism), and Vanilla JS, hosted on GitHub Pages.
+* **Backend:** A Python Flask API hosted on a 16GB Hugging Face Docker Space to handle the heavy computational load of TensorFlow.
+* **Model:** A custom Sequential Neural Network trained using Keras/TensorFlow.
 
-The goal of this project is to predict the **probability** of an individual experiencing depression based on behavioral, demographic, and academic data. Rather than simply classifying a user as "Depressed" or "Not Depressed" (a binary output), the model is designed to output a continuous risk score (0.0 to 1.0). This spectrum approach is crucial in healthcare and psychology, as it allows for threshold tuning and early-intervention risk assessments.
+## 📊 The Dataset & Methodology
+The model analyzes 15 key features, including:
+* Daily Social Media Hours & Primary Platform
+* Screen Time Before Sleep
+* Academic Performance & Physical Activity
+* Self-reported Stress, Anxiety, and Addiction levels
 
----
+**Data Preprocessing:**
+* Categorical variables (e.g., Platform, Gender) were One-Hot Encoded.
+* Ordinal variables (e.g., Social Interaction) were mapped numerically.
+* Continuous variables were normalized using Z-score scaling to ensure stable neural network gradients.
 
-## 📊 Dataset Features
+**Model Performance:**
+* **Architecture:** 3 Dense layers with ReLU activation, incorporating a Dropout layer (0.2) to prevent overfitting, and a final Sigmoid activation for probability output.
+* **Validation Accuracy:** ~97.4%
+* **Loss Function:** Binary Crossentropy
 
-The model ingests a complex dataset containing both numerical and categorical variables:
-* **Demographics:** Age, Gender
-* **Digital Habits:** Daily Social Media Hours, Platform Usage (Instagram, TikTok, Both), Screen Time Before Sleep
-* **Lifestyle:** Sleep Hours, Physical Activity, Social Interaction Level
-* **Psychological/Academic:** Academic Performance, Stress Level, Anxiety Level, Addiction Level
-* **Target Variable:** `depression_label` (0 = No, 1 = Yes)
+## 💻 Running the Project Locally
 
----
+### Backend Setup
+1. Navigate to the backend directory.
+2. Install dependencies: `pip install -r requirements.txt`
+3. Run the Flask server: `python app.py`
+4. The API will be available at `http://127.0.0.1:7860`
 
-## ⚙️ Methodology & Mathematical Reasoning
+### Frontend Setup
+1. Open the frontend repository.
+2. You can use any live server (e.g., VS Code Live Server) to open `index.html`.
+3. *Note: Ensure the `fetch` URL in `script.js` points to your local backend if testing locally, or the Hugging Face Space URL for production.*
 
-To demonstrate a deep understanding of data science fundamentals, all preprocessing steps (encoding, scaling, splitting) were implemented manually using **Pandas** and **NumPy**, strictly avoiding automated wrapper functions from `scikit-learn`.
-
-### 1. Categorical Encoding
-Machine learning models require numerical inputs. Categorical data was handled based on its underlying mathematical nature:
-* **Ordinal Encoding:** Features with a natural hierarchy (e.g., `social_interaction_level` as 'low', 'medium', 'high') were mapped linearly to integers (0, 1, 2). This preserves the intrinsic weight of the categories.
-* **One-Hot Encoding:** Nominal data without a natural rank (e.g., `platform_usage` and `gender`) were transformed using binary dummy variables. This prevents the neural network from incorrectly assuming that "Instagram" is mathematically greater than "TikTok".
-
-### 2. Manual Train/Test Split & Data Leakage Prevention
-The dataset was randomly shuffled and sliced into an 80% training set and a 20% testing set. 
-**Reasoning:** The testing set must act as strictly unseen data. By manually enforcing this split *before* scaling, we ensure zero "data leakage" occurs (where the model accidentally learns the statistical distribution of the test set).
-
-### 3. Feature Scaling (Z-Score Standardization)
-Neural networks are highly sensitive to unscaled data due to the nature of gradient descent optimization. A feature like `age` (e.g., 20) would statistically overpower `screen_time` (e.g., 1.5), distorting the weights.
-
-We scaled features using Standard/Z-Score Normalization. The mean ($\mu$) and standard deviation ($\sigma$) were calculated **strictly on the training data**, and the formula was applied to both the train and test sets:
-
-$$Z = \frac{X - \mu}{\sigma}$$
-
----
-
-## 🧠 Model Architecture
-
-The core of the project is a Feed-Forward Neural Network (Multilayer Perceptron) built with **TensorFlow/Keras**. 
-
-* **Input Layer:** Dynamically sizes to the number of processed features.
-* **Hidden Layers:** * `Dense (32 neurons)` + `ReLU` activation function. 
-  * `Dropout (0.2)`: Randomly deactivates 20% of neurons during training. **Reasoning:** This acts as regularization, preventing the model from overfitting or relying too heavily on dominant features like `stress_level`.
-  * `Dense (16 neurons)` + `ReLU` activation.
-* **Output Layer:** `Dense (1 neuron)` + `Sigmoid` activation. 
-  **Reasoning:** The Sigmoid function mathematically forces the final output into a probability distribution curve between 0 and 1:
-  $$S(x) = \frac{1}{1 + e^{-x}}$$
-* **Compilation:** Optimized using the `Adam` optimizer and evaluated using `binary_crossentropy` loss, which heavily penalizes the model for being confidently incorrect.
-
----
-
-## 🌐 Web Deployment (TensorFlow.js)
-
-The project leverages a serverless architecture, drastically reducing hosting costs and latency.
-1. The trained Keras 3 model (`.keras`) was converted to a web-friendly JSON and binary weight format (`tfjs_layers_model`) using the `tensorflowjs_converter`.
-2. The web interface relies on standard HTML/JS. 
-3. **In-Browser Inference:** When a user inputs their data, the standardizations are applied in JavaScript, and the prediction happens entirely client-side. No user data is ever sent to a backend server, ensuring complete data privacy.
-4. Hosted statically and freely via **GitHub Pages**.
-
----
-
-## 💻 How to Run Locally
-
-If you wish to explore the code or run the Python notebook locally:
-
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/Shobhit3244/ML-Project-Depression-Prediction.git](https://github.com/Shobhit3244/ML-Project-Depression-Prediction.git)
+## 📝 License
+This project was created for educational purposes.
