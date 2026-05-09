@@ -12,7 +12,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # 1. Load the model (Must be in the exact same folder as this script on Render)
 # We use try-except to catch any file path errors immediately
 try:
-    model = tf.keras.models.load_model('model/depression_model.h5')
+    model = tf.keras.models.load_model('depression_model.h5')
     print("Model loaded successfully!")
 except Exception as e:
     print(f"Error loading model: {e}")

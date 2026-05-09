@@ -47,7 +47,7 @@ async function runPrediction() {
     try {
         // 4. Send the data to your live Render Python backend
         // Make sure this matches your exact Render URL ending in /predict
-        const response = await fetch('https://ml-project-depression-prediction-api.onrender.com/predict', {
+        const response = await fetch('https://Shobhit3244-mindmetrics-api.hf.space/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
