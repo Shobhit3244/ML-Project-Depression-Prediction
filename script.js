@@ -1,10 +1,17 @@
-async function runPrediction() {
-    // 1. Change button text to show it's working
+// Enable the button immediately since we don't have to wait for TFJS to load anymore!
+document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById('predict-btn');
-    btn.innerText = "Calculating...";
+    btn.disabled = false;
+    btn.innerText = "Calculate Risk Score";
+});
+
+async function runPrediction() {
+    // 1. Change button text to show it's working (and disable it so they don't spam click)
+    const btn = document.getElementById('predict-btn');
+    btn.innerText = "Calculating (Waking Server)...";
     btn.disabled = true;
 
-    // 2. Gather all raw inputs
+    // 2. Gather all raw inputs from the HTML form
     const rawAge = parseFloat(document.getElementById('age').value);
     const rawDailySocial = parseFloat(document.getElementById('dailySocial').value);
     const rawSleep = parseFloat(document.getElementById('sleepHours').value);
@@ -18,10 +25,18 @@ async function runPrediction() {
     const gender = document.getElementById('gender').value;
     const platform = document.getElementById('platform').value;
 
-    // 3. Map exactly to Python DataFrame columns
+    // 3. Map exactly to Python DataFrame columns (Must be 15 items!)
     let userFeatures = [
-        rawAge, rawDailySocial, rawSleep, rawScreenTime, rawAcademic, rawPhysical,
-        rawSocialInteraction, rawStress, rawAnxiety, rawAddiction,
+        rawAge,
+        rawDailySocial,
+        rawSleep,
+        rawScreenTime,
+        rawAcademic,
+        rawPhysical,
+        rawSocialInteraction,
+        rawStress,
+        rawAnxiety,
+        rawAddiction,
         gender === 'female' ? 1.0 : 0.0,
         gender === 'male' ? 1.0 : 0.0,
         platform === 'Both' ? 1.0 : 0.0,
@@ -30,16 +45,21 @@ async function runPrediction() {
     ];
 
     try {
-        // 4. Send the data to your Python backend
-        // Note: You will replace this URL with your actual live Python server URL later
-        // Replace the 127.0.0.1 link with your real Render URL!
-        const response = await fetch('https://ml-project-depression-prediction-api.onrender.com', {
+        // 4. Send the data to your live Render Python backend
+        // Make sure this matches your exact Render URL ending in /predict
+        const response = await fetch('https://ml-project-depression-prediction-api.onrender.com/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ features: userFeatures })
         });
+
+        // If the server is still waking up or errors out
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const data = await response.json();
 
@@ -49,9 +69,14 @@ async function runPrediction() {
             document.getElementById('result-container').style.display = 'block';
             document.getElementById('result-text').innerText = `${percentage}%`;
 
-            if (percentage < 30) document.getElementById('result-text').style.color = "#32D74B";
-            else if (percentage < 70) document.getElementById('result-text').style.color = "#FFD60A";
-            else document.getElementById('result-text').style.color = "#FF453A";
+            // Dynamic coloring based on risk severity
+            if (percentage < 30) {
+                document.getElementById('result-text').style.color = "#32D74B"; // Green
+            } else if (percentage < 70) {
+                document.getElementById('result-text').style.color = "#FFD60A"; // Yellow
+            } else {
+                document.getElementById('result-text').style.color = "#FF453A"; // Red
+            }
 
             document.getElementById('error-log').innerText = "";
         } else {
@@ -61,14 +86,10 @@ async function runPrediction() {
     } catch (error) {
         console.error("Prediction error:", error);
         document.getElementById('result-container').style.display = 'block';
-        document.getElementById('error-log').innerText = "Server Error: " + error.message;
+        document.getElementById('error-log').innerText = "Server Error: Could not connect to AI. Please try again in 30 seconds (Server might be waking up).";
     } finally {
-        // Reset button
+        // Reset button state
         btn.innerText = "Calculate Risk Score";
         btn.disabled = false;
     }
 }
-
-// Enable the button immediately since we don't have to wait for TF.js to load anymore!
-document.getElementById('predict-btn').disabled = false;
-document.getElementById('predict-btn').innerText = "Calculate Risk Score";
