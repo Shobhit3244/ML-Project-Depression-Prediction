@@ -32,7 +32,8 @@ async function runPrediction() {
     try {
         // 4. Send the data to your Python backend
         // Note: You will replace this URL with your actual live Python server URL later
-        const response = await fetch('http://127.0.0.1:5000/predict', {
+        // Replace the 127.0.0.1 link with your real Render URL!
+        const response = await fetch('https://ml-project-depression-prediction-api.onrender.com', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
