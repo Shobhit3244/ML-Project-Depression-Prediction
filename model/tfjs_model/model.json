@@ -97,6 +97,19 @@
                     }
                 ]
             }
+        },
+        "training_config": {
+            "loss": "binary_crossentropy",
+            "metrics": [
+                "accuracy"
+            ],
+            "optimizer_config": {
+                "class_name": "Adam",
+                "config": {
+                    "name": "adam",
+                    "learning_rate": 0.001
+                }
+            }
         }
     },
     "weightsManifest": [
@@ -106,7 +119,7 @@
             ],
             "weights": [
                 {
-                    "name": "sequential_1/dense_6/kernel",
+                    "name": "dense_6/kernel",
                     "shape": [
                         15,
                         32
@@ -114,14 +127,14 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "sequential_1/dense_6/bias",
+                    "name": "dense_6/bias",
                     "shape": [
                         32
                     ],
                     "dtype": "float32"
                 },
                 {
-                    "name": "sequential_1/dense_7/kernel",
+                    "name": "dense_7/kernel",
                     "shape": [
                         32,
                         16
@@ -129,14 +142,14 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "sequential_1/dense_7/bias",
+                    "name": "dense_7/bias",
                     "shape": [
                         16
                     ],
                     "dtype": "float32"
                 },
                 {
-                    "name": "sequential_1/dense_8/kernel",
+                    "name": "dense_8/kernel",
                     "shape": [
                         16,
                         1
@@ -144,7 +157,7 @@
                     "dtype": "float32"
                 },
                 {
-                    "name": "sequential_1/dense_8/bias",
+                    "name": "dense_8/bias",
                     "shape": [
                         1
                     ],
